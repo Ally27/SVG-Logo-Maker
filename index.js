@@ -1,11 +1,13 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
+const { Triangle, Circle, Square } = require("./lib/shapes");
+const SVG = require("./lib/SVG");
 
 inquirer
   .prompt([
     {
       type: "input",
-      name: "logoInfo",
+      name: "text",
       message: "Enter the Logo Name",
     },
     {
@@ -15,21 +17,34 @@ inquirer
     },
     {
       type: "input",
-      name: "logoColor",
+      name: "shapeColor",
       message: "Enter the logo color",
     },
     {
       type: "input",
-      name: "shapeType",
+      name: "shape",
       message: "Select a shape:",
       choices: ["Square", "Triangle", "Circle"],
     },
   ])
-  .then((userData) => {
-    const svgPath = "";
-    const finalLogo = formShape(userData);
-    fs.writeToFile(svgPath, generateSVG(finalLogo), (err) =>
-      err ? console.error(err) : console.info("Generating Logo.svg")
-    );
+  .then((input) => {
+    console.log(input);
+    let shape;
+    if (input.shape.toLowerCase() === "circle") {
+      shape = new Circle();
+    }
+    if (input.shape.toLowerCase() === "square") {
+      shape = new Square();
+    }
+    if (input.shape.toLowerCase() === "triangle") {
+      shape = new Triangle();
+    }
+    shape.setColor(input.shapeColor);
+
+    const Svg = new SVG();
+    Svg.setText(input.text, input.textColor);
+    Svg.setShape(shape);
+
+    fs.writeFileSync("logo.svg", Svg.render());
   })
   .catch((err) => console.error(err));

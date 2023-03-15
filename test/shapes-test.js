@@ -1,6 +1,6 @@
-//created tests for
+//created tests
 
-const { Square, Triangle, Circle } = require("./shapes");
+const { Square, Triangle, Circle } = require("../lib/shapes");
 describe("Square", () => {
   test("renders correctly", () => {
     const shape = new Square();
